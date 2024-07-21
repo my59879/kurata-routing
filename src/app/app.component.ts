@@ -1,13 +1,32 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './user/auth.service';
 
 @Component({
-  selector: 'kr-root',
-  standalone: true,
-  imports: [RouterOutlet],
+  selector: 'pm-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss'],
+  imports: [CommonModule], // Add this line
+  standalone: true 
 })
 export class AppComponent {
-  title = 'kurata-routing';
+  pageTitle = 'Acme Product Management';
+
+  get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn;
+  }
+
+  get userName(): string {
+    if (this.authService.currentUser) {
+      return this.authService.currentUser.userName;
+    }
+    return '';
+  }
+
+  constructor(private authService: AuthService) { }
+
+  logOut(): void {
+    this.authService.logout();
+    console.log('Log out');
+  }
 }
